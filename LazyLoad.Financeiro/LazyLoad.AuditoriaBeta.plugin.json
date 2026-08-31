@@ -1,0 +1,10 @@
+{
+  "id": "auditoria-beta",
+  "title": "Auditoria Fiscal & IA (Exclusivo Beta)",
+  "fileName": "LazyLoad.Financeiro.dll",
+  "routePrefix": "financeiro",
+  "icon": "🔍",
+  "description": "Módulo avançado de auditoria de notas fiscais liberado exclusivamente para a Empresa Beta.",
+  "buttonComponentType": "LazyLoad.Financeiro.Components.BotaoAuditoriaAvancada",
+  "buttonLabel": "Executar Auditoria Fiscal Avançada (Exclusivo Beta)"
+}

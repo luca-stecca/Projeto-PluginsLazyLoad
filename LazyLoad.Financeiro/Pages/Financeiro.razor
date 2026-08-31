@@ -1,0 +1,49 @@
+@page "/financeiro"
+
+<PageTitle>Módulo Financeiro (Empresa Beta)</PageTitle>
+
+<section class="module-success">
+    <div class="module-success__icon" aria-hidden="true" style="color: #60a5fa; border-color: rgba(96, 165, 250, 0.4); background: rgba(96, 165, 250, 0.1);">💰</div>
+    <p class="eyebrow" style="color: #60a5fa;">Módulo Exclusivo · Empresa Beta</p>
+    <h1>Painel de Gestão Financeira</h1>
+    <p class="module-success__lead">
+        Esta página pertence exclusivamente à DLL <code>LazyLoad.Financeiro.dll</code>, localizada na pasta da <strong>Empresa Beta</strong>.
+        Ela foi baixada e carregada via Lazy Load seguro após a validação do Token JWT.
+    </p>
+
+    <dl class="module-details">
+        <div>
+            <dt>Módulo / Assembly</dt>
+            <dd>LazyLoad.Financeiro.dll</dd>
+        </div>
+        <div>
+            <dt>Saldo Simulado</dt>
+            <dd style="color: #60a5fa;">R$ @saldo.ToString("N2")</dd>
+        </div>
+    </dl>
+
+    <div class="module-actions">
+        <button class="button button--primary" style="background: #3b82f6; border-color: #60a5fa; color: #fff;" @onclick="SimularTransacao">
+            Simular Transação Financeira
+        </button>
+        <a class="button button--secondary" href="">Voltar ao Início</a>
+    </div>
+
+    @if (ultimaTransacao is not null)
+    {
+        <p class="execution-result" style="border-left-color: #3b82f6;" role="status">
+            Transação registrada com sucesso às <strong>@ultimaTransacao.Value.ToString("HH:mm:ss.fff")</strong>.
+        </p>
+    }
+</section>
+
+@code {
+    private decimal saldo = 154200.50m;
+    private DateTimeOffset? ultimaTransacao;
+
+    private void SimularTransacao()
+    {
+        saldo += 2500.00m;
+        ultimaTransacao = DateTimeOffset.Now;
+    }
+}

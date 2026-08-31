@@ -1,0 +1,82 @@
+@using System.Reflection
+@using LazyLoad.Services
+@using Microsoft.Extensions.Logging
+@inject TenantPluginManager PluginManager
+@inject ILogger<App> Logger
+
+<Router AppAssembly="@typeof(App).Assembly"
+        AdditionalAssemblies="@lazyLoadedAssemblies"
+        OnNavigateAsync="@OnNavigateAsync"
+        NotFoundPage="@typeof(Pages.NotFound)">
+    <Navigating>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <section class="loading-module" role="status" aria-live="polite">
+                <span class="loading-module__spinner" aria-hidden="true"></span>
+                <div>
+                    <strong>Carregando módulo da empresa sob demanda...</strong>
+                    <p>Baixando os bytes da DLL da pasta segura do tenant via API...</p>
+                </div>
+            </section>
+        </LayoutView>
+    </Navigating>
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+</Router>
+
+@code {
+    private readonly List<Assembly> lazyLoadedAssemblies = [];
+
+    private async Task OnNavigateAsync(NavigationContext context)
+    {
+        var targetSegment = context.Path.Trim('/').Split('/').FirstOrDefault() ?? string.Empty;
+        if (string.IsNullOrEmpty(targetSegment))
+        {
+            return;
+        }
+
+        // Verifica se a rota acessada pertence a algum plugin autorizado para a empresa atual
+        var matchingPlugin = PluginManager.AvailablePlugins.FirstOrDefault(p =>
+            string.Equals(p.RoutePrefix, targetSegment, StringComparison.OrdinalIgnoreCase));
+
+        if (matchingPlugin is null)
+        {
+            return;
+        }
+
+        // Se o assembly já foi carregado no PluginManager, apenas garante que está registrado no Router
+        var existing = PluginManager.GetLoadedAssembly(matchingPlugin.Id);
+        if (existing != null)
+        {
+            if (!lazyLoadedAssemblies.Contains(existing))
+            {
+                lazyLoadedAssemblies.Add(existing);
+            }
+            return;
+        }
+
+        context.CancellationToken.ThrowIfCancellationRequested();
+
+        try
+        {
+            // Executa o download autenticado e carregamento em memória da DLL do tenant
+            var loadedAssembly = await PluginManager.LoadPluginAssemblyAsync(matchingPlugin, context.CancellationToken);
+
+            if (loadedAssembly is not null && !lazyLoadedAssemblies.Contains(loadedAssembly))
+            {
+                lazyLoadedAssemblies.Add(loadedAssembly);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Erro ao carregar o plugin {PluginTitle} da empresa.", matchingPlugin.Title);
+            throw;
+        }
+    }
+}
+

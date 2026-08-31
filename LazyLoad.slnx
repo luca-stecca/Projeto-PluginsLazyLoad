@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="LazyLoad.Server/LazyLoad.Server.csproj" />
+  <Project Path="LazyLoad/LazyLoad.csproj" />
+</Solution>

@@ -1,0 +1,52 @@
+@page "/relatorios"
+
+<PageTitle>Módulo carregado sob demanda</PageTitle>
+
+<section class="module-success">
+    <div class="module-success__icon" aria-hidden="true">✓</div>
+    <p class="eyebrow">Lazy Load concluído</p>
+    <h1>O módulo de relatórios chegou agora.</h1>
+    <p class="module-success__lead">
+        Esta página e seu código não pertencem ao assembly principal. O navegador baixou
+        <code>@AssemblyFileName</code> somente quando a rota <code>/relatorios</code> foi solicitada.
+    </p>
+
+    <dl class="module-details">
+        <div>
+            <dt>Assembly</dt>
+            <dd>@AssemblyFileName</dd>
+        </div>
+        <div>
+            <dt>Execuções nesta página</dt>
+            <dd>@execucoes</dd>
+        </div>
+    </dl>
+
+    <div class="module-actions">
+        <button class="button button--primary" @onclick="ExecutarCodigoDoModulo">
+            Executar código do módulo
+        </button>
+        <a class="button button--secondary" href="">Voltar ao início</a>
+    </div>
+
+    @if (ultimaExecucao is not null)
+    {
+        <p class="execution-result" role="status">
+            Código executado com sucesso às <strong>@ultimaExecucao.Value.ToString("HH:mm:ss.fff")</strong>.
+        </p>
+    }
+</section>
+
+@code {
+    private int execucoes;
+    private DateTimeOffset? ultimaExecucao;
+
+    private static string AssemblyFileName =>
+        $"{typeof(Relatorios).Assembly.GetName().Name}.wasm";
+
+    private void ExecutarCodigoDoModulo()
+    {
+        execucoes++;
+        ultimaExecucao = DateTimeOffset.Now;
+    }
+}

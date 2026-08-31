@@ -1,0 +1,8 @@
+{
+  "tenantId": "EmpresaBeta",
+  "allowedPlugins": [
+    "relatorios",
+    "financeiro",
+    "auditoria-beta"
+  ]
+}

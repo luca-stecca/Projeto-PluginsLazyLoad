@@ -1,0 +1,10 @@
+{
+  "id": "financeiro",
+  "title": "Módulo Financeiro",
+  "fileName": "LazyLoad.Financeiro.dll",
+  "routePrefix": "financeiro",
+  "icon": "💰",
+  "description": "Painel de controle financeiro e conciliação bancária.",
+  "buttonComponentType": "LazyLoad.Financeiro.Components.BotaoPluginFinanceiro",
+  "buttonLabel": "Conciliar Caixa (Botão Plugin)"
+}

@@ -1,0 +1,9 @@
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\obj\Debug\net10.0\staticwebassets.build.json

@@ -1,0 +1,5 @@
+wwwroot\css\app.css
+wwwroot\icon-192.png
+wwwroot\modules\LazyLoad.Relatorios.dll
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\wwwroot\css\app.css
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad\wwwroot\modules\LazyLoad.Relatorios.dll

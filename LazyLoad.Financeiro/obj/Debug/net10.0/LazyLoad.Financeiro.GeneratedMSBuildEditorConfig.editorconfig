@@ -1,0 +1,40 @@
+is_global = true
+build_property.TargetFramework = net10.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EntryPointFilePath = 
+build_property._SupportedPlatformList = Linux,macOS,Windows,browser
+build_property.RootNamespace = LazyLoad.Financeiro
+build_property.RootNamespace = LazyLoad.Financeiro
+build_property.ProjectDir = C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad.Financeiro\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 10.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad.Financeiro
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 10.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/luca.machado/source/repos/LazyLoad/LazyLoad.Financeiro/Components/BotaoAuditoriaAvancada.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCb3Rhb0F1ZGl0b3JpYUF2YW5jYWRhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/luca.machado/source/repos/LazyLoad/LazyLoad.Financeiro/Components/BotaoPluginFinanceiro.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCb3Rhb1BsdWdpbkZpbmFuY2Vpcm8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/luca.machado/source/repos/LazyLoad/LazyLoad.Financeiro/Pages/Financeiro.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmluYW5jZWlyby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/luca.machado/source/repos/LazyLoad/LazyLoad.Financeiro/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 

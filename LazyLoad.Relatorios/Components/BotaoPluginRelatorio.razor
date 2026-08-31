@@ -1,0 +1,34 @@
+<div class="plugin-button-wrapper">
+    <button class="button button--primary" @onclick="ExecutarAcaoPlugin">
+        <span aria-hidden="true">⚡</span>
+        @Rotulo
+    </button>
+
+    @if (!string.IsNullOrEmpty(mensagem))
+    {
+        <div class="execution-result" style="margin-top: 0.8rem;" role="status">
+            <span>@mensagem</span>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Rotulo { get; set; } = "Executar Ação do Plugin";
+
+    [Parameter]
+    public EventCallback<string> OnExecutado { get; set; }
+
+    private string? mensagem;
+
+    private async Task ExecutarAcaoPlugin()
+    {
+        var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+        mensagem = $"[Plugin] Código do botão executado com sucesso às {timestamp}!";
+        
+        if (OnExecutado.HasDelegate)
+        {
+            await OnExecutado.InvokeAsync(mensagem);
+        }
+    }
+}

@@ -1,0 +1,264 @@
+@page "/"
+@using System.Reflection
+@using LazyLoad.Services
+@inject AuthService Auth
+@inject TenantPluginManager PluginManager
+@implements IDisposable
+
+<PageTitle>Multi-Tenant Lazy Load & Plugins</PageTitle>
+
+<section class="hero">
+    <div class="hero__copy">
+        <p class="eyebrow">Blazor WebAssembly · Multi-Tenant Architecture</p>
+        <h1>Plugins e Lazy Load por Pasta de Empresa.</h1>
+        <p class="hero__lead">
+            Cada empresa possui uma pasta isolada no servidor com suas DLLs exclusivas. Ao logar,
+            o sistema obtém o Token JWT, descobre os plugins da empresa e faz o Lazy Load sob demanda.
+        </p>
+    </div>
+
+    <!-- CARD DE LOGIN RÁPIDO & STATUS -->
+    <aside class="status-card" aria-label="Status da Sessão">
+        <div class="status-card__header">
+            <span>Sessão Atual</span>
+            <span class="status-dot @(Auth.IsAuthenticated ? "status-dot--loaded" : null)"></span>
+        </div>
+
+        @if (!Auth.IsAuthenticated)
+        {
+            <strong class="status-card__value">Não Autenticado</strong>
+            <p>Selecione uma empresa para simular o login e carregar as DLLs da pasta correspondente:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.2rem;">
+                <button class="button button--primary" style="justify-content: flex-start;" @onclick='() => FazerLoginAsync("alpha")'>
+                    🏭 Entrar como <strong>Empresa Alpha</strong> (Indústria)
+                </button>
+                <button class="button button--secondary" style="justify-content: flex-start;" @onclick='() => FazerLoginAsync("beta")'>
+                    🏢 Entrar como <strong>Empresa Beta</strong> (Serviços)
+                </button>
+            </div>
+        }
+        else
+        {
+            <strong class="status-card__value status-card__value--loaded">@Auth.CurrentUser?.CompanyName</strong>
+            <p>
+                Usuário: <code>@Auth.CurrentUser?.Username</code><br />
+                Pasta no Servidor: <code>storage/plugins/@Auth.CurrentUser?.TenantId/</code>
+            </p>
+
+            <div style="margin-top: 1.2rem;">
+                <button class="button button--secondary" style="width: 100%;" @onclick="FazerLogoutAsync">
+                    🔒 Sair (Logout)
+                </button>
+            </div>
+        }
+    </aside>
+</section>
+
+@if (Auth.IsAuthenticated)
+{
+    <!-- SEÇÃO: PLUGINS ENCONTRADOS NA PASTA DA EMPRESA -->
+    <section style="margin-top: 3rem;">
+        <p class="eyebrow">Catálogo do Tenant</p>
+        <h2>Módulos na pasta de @Auth.CurrentUser?.CompanyName</h2>
+        <p style="color: var(--muted); margin-bottom: 2rem;">
+            O backend escaneou o diretório da sua empresa e encontrou <strong>@PluginManager.AvailablePlugins.Count</strong> módulo(s) disponível(is):
+        </p>
+
+        @if (PluginManager.AvailablePlugins.Count == 0)
+        {
+            <div class="status-card">
+                <p>Nenhuma DLL de plugin encontrada na pasta da sua empresa.</p>
+            </div>
+        }
+        else
+        {
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                @foreach (var plugin in PluginManager.AvailablePlugins)
+                {
+                    var isLoaded = PluginManager.IsPluginLoaded(plugin.Id);
+
+                    <div class="status-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span style="font-size: 2rem;">@plugin.Icon</span>
+                                <span class="status-dot @(isLoaded ? "status-dot--loaded" : null)"></span>
+                            </div>
+                            <h3 style="font-size: 1.3rem; margin: 0 0 0.5rem 0;">@plugin.Title</h3>
+                            <p style="margin: 0 0 1rem 0; font-size: 0.9rem;">@plugin.Description</p>
+                            
+                            <dl class="module-details" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+                                <div>
+                                    <dt>Arquivo DLL</dt>
+                                    <dd>@plugin.FileName</dd>
+                                </div>
+                                <div>
+                                    <dt>Tamanho</dt>
+                                    <dd>@((plugin.SizeBytes / 1024.0).ToString("N1")) KB</dd>
+                                </div>
+                            </dl>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                            <!-- Ação 1: Navegar para a Página com Lazy Load -->
+                            <a class="button button--primary" href="@plugin.RoutePrefix">
+                                Acessar Página (@plugin.RoutePrefix) →
+                            </a>
+
+                            <!-- Ação 2: Injetar Botão Plugin no Slot Dinâmico -->
+                            <button class="button button--secondary" @onclick="() => InjetarBotaoPluginAsync(plugin)" disabled="@carregandoBotao">
+                                🔌 Carregar Botão Plugin no Slot
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+
+    <!-- SEÇÃO: PONTO DE EXTENSÃO (SLOT DE BOTÃO DINÂMICO) -->
+    <section class="status-card" style="margin-top: 3rem; background: var(--surface);">
+        <p class="eyebrow">Ponto de Extensão (Slot de Componente Dinâmico)</p>
+        <h2 style="font-size: 1.6rem; margin-bottom: 0.8rem;">Área de Injeção de Botões da Empresa</h2>
+        <p style="color: var(--muted); margin-bottom: 1.5rem;">
+            Quando você clica em <em>"Carregar Botão Plugin no Slot"</em>, a DLL é baixada da pasta do tenant e o botão é instanciado aqui via <code>&lt;DynamicComponent&gt;</code>.
+        </p>
+
+        @if (tipoBotaoCarregado is null)
+        {
+            <p style="color: var(--muted); font-style: italic;">
+                Nenhum botão de plugin injetado no momento. Clique no card de um plugin acima para carregar o botão.
+            </p>
+        }
+        else
+        {
+            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <span class="status-dot status-dot--loaded"></span>
+                    <span style="color: var(--accent); font-weight: 700; font-size: 0.9rem;">
+                        Componente instanciado da DLL (@nomePluginBotaoAtivo):
+                    </span>
+                </div>
+
+                <!-- RENDERIZAÇÃO DINÂMICA DO BOTÃO PLUGIN -->
+                <DynamicComponent Type="@tipoBotaoCarregado" Parameters="@parametrosBotao" />
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(feedbackPlugin))
+        {
+            <p class="execution-result" style="margin-top: 1.2rem;">
+                <strong>Host recebeu do Botão Plugin:</strong> @feedbackPlugin
+            </p>
+        }
+    </section>
+}
+
+<section class="explanation" aria-labelledby="como-funciona">
+    <div>
+        <p class="eyebrow">Arquitetura</p>
+        <h2 id="como-funciona">Como esta solução funciona</h2>
+    </div>
+
+    <ol class="steps">
+        <li>
+            <span class="steps__number">01</span>
+            <div>
+                <strong>Soluções Separadas</strong>
+                <p>Os plugins residem na solução <code>LazyLoad.Plugins.slnx</code>, compilando isoladamente.</p>
+            </div>
+        </li>
+        <li>
+            <span class="steps__number">02</span>
+            <div>
+                <strong>Pastas por Tenant com Proteção</strong>
+                <p>O backend organiza <code>storage/plugins/{TenantId}/</code> e protege o download contra acessos de outros clientes.</p>
+            </div>
+        </li>
+        <li>
+            <span class="steps__number">03</span>
+            <div>
+                <strong>Autenticação JWT & Lazy Load</strong>
+                <p>Ao logar, o token informa a empresa. As DLLs só são baixadas quando a rota ou o botão é acionado.</p>
+            </div>
+        </li>
+    </ol>
+</section>
+
+@code {
+    private bool carregandoBotao;
+    private Type? tipoBotaoCarregado;
+    private Dictionary<string, object> parametrosBotao = new();
+    private string? nomePluginBotaoAtivo;
+    private string? feedbackPlugin;
+
+    protected override void OnInitialized()
+    {
+        Auth.OnAuthStateChanged += StateHasChanged;
+        PluginManager.OnCatalogUpdated += StateHasChanged;
+    }
+
+    private async Task FazerLoginAsync(string user)
+    {
+        tipoBotaoCarregado = null;
+        feedbackPlugin = null;
+        var ok = await Auth.LoginAsync(user);
+        if (ok)
+        {
+            await PluginManager.RefreshCatalogAsync();
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task FazerLogoutAsync()
+    {
+        tipoBotaoCarregado = null;
+        feedbackPlugin = null;
+        Auth.Logout();
+        await PluginManager.RefreshCatalogAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task InjetarBotaoPluginAsync(PluginMetadataDto plugin)
+    {
+        carregandoBotao = true;
+        feedbackPlugin = null;
+
+        try
+        {
+            // 1. Baixa a DLL da pasta do tenant via API autenticada e carrega na memória
+            var assembly = await PluginManager.LoadPluginAssemblyAsync(plugin);
+            if (assembly is null) return;
+
+            // 2. Extrai o Type do Componente do Botão usando Reflection
+            tipoBotaoCarregado = assembly.GetType(plugin.ButtonComponentType);
+            nomePluginBotaoAtivo = plugin.Title;
+
+            // 3. Prepara parâmetros e canal de retorno (EventCallback)
+            parametrosBotao = new Dictionary<string, object>
+            {
+                { "Rotulo", plugin.ButtonLabel },
+                { "OnExecutado", EventCallback.Factory.Create<string>(this, MensagemRecebidaDoPlugin) }
+            };
+        }
+        catch (Exception ex)
+        {
+            feedbackPlugin = $"Erro ao carregar botão do plugin: {ex.Message}";
+        }
+        finally
+        {
+            carregandoBotao = false;
+        }
+    }
+
+    private void MensagemRecebidaDoPlugin(string msg)
+    {
+        feedbackPlugin = msg;
+    }
+
+    public void Dispose()
+    {
+        Auth.OnAuthStateChanged -= StateHasChanged;
+        PluginManager.OnCatalogUpdated -= StateHasChanged;
+    }
+}

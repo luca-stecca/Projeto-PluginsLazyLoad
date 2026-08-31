@@ -1,0 +1,23 @@
+@inherits LayoutComponentBase
+
+<div class="page-shell">
+    <header class="site-header">
+        <a class="brand" href="" aria-label="Ir para a página inicial">
+            <span class="brand__mark" aria-hidden="true">L</span>
+            <span>
+                <strong>Lazy Load Lab</strong>
+                <small>Blazor WebAssembly</small>
+            </span>
+        </a>
+
+        <span class="technology-badge">.NET 10</span>
+    </header>
+
+    <main class="site-main">
+        @Body
+    </main>
+
+    <footer class="site-footer">
+        Exemplo isolado, sem dependências de negócio ou bibliotecas de terceiros.
+    </footer>
+</div>

@@ -1,0 +1,10 @@
+{
+  "id": "relatorios",
+  "title": "Módulo de Relatórios",
+  "fileName": "LazyLoad.Relatorios.dll",
+  "routePrefix": "relatorios",
+  "icon": "📊",
+  "description": "Módulo exclusivo de relatórios e exportações sob demanda.",
+  "buttonComponentType": "LazyLoad.Relatorios.Components.BotaoPluginRelatorio",
+  "buttonLabel": "Gerar Relatório Instantâneo (Botão Plugin)"
+}

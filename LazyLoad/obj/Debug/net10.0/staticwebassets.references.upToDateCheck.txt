@@ -1,0 +1,1 @@
+C:\Users\luca.machado\source\repos\LazyLoad\LazyLoad.Relatorios\obj\Debug\net10.0\staticwebassets.build.json

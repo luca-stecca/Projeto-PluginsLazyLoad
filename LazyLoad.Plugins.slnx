@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="LazyLoad.Relatorios/LazyLoad.Relatorios.csproj" />
+  <Project Path="LazyLoad.Financeiro/LazyLoad.Financeiro.csproj" />
+</Solution>

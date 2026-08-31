@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Demonstração de lazy loading e plugins no Blazor WebAssembly." />
+    <title>Lazy Load & Plugins</title>
+    <base href="/" />
+    <link href="_framework/dotnet.xw6utk146y.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-f2SItKbt3cTkFMVzZY23PBG1vmJnAw8q+0k8HJiBvi0=" />
+    <link rel="stylesheet" href="css/app.css" />
+    <script type="importmap">{
+  "imports": {
+    "./_framework/Microsoft.DotNet.HotReload.WebAssembly.Browser.lib.module.js": "./_framework/Microsoft.DotNet.HotReload.WebAssembly.Browser.99zm1jdh75.lib.module.js",
+    "./_framework/blazor.webassembly.js": "./_framework/blazor.webassembly.958z1vx7fr.js",
+    "./_framework/dotnet.native.js": "./_framework/dotnet.native.rjbmzc4jpg.js",
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.r2kbxkuujc.js",
+    "./_framework/dotnet.js": "./_framework/dotnet.xw6utk146y.js"
+  },
+  "scopes": {},
+  "integrity": {
+    "./_framework/Microsoft.DotNet.HotReload.WebAssembly.Browser.99zm1jdh75.lib.module.js": "sha256-A8e6zZwhOqf7lDQqbbCYcAUv4wGE9aQxOo4WyYxR//0=",
+    "./_framework/Microsoft.DotNet.HotReload.WebAssembly.Browser.lib.module.js": "sha256-A8e6zZwhOqf7lDQqbbCYcAUv4wGE9aQxOo4WyYxR//0=",
+    "./_framework/blazor.webassembly.958z1vx7fr.js": "sha256-A59Tr9HqEhHMu8kU7kruLI9ayw5MRS6Lvc6z7jCbghk=",
+    "./_framework/blazor.webassembly.js": "sha256-A59Tr9HqEhHMu8kU7kruLI9ayw5MRS6Lvc6z7jCbghk=",
+    "./_framework/dotnet.js": "sha256-f2SItKbt3cTkFMVzZY23PBG1vmJnAw8q+0k8HJiBvi0=",
+    "./_framework/dotnet.native.js": "sha256-95bE510j3EADMNW2OKa/DMBhu8N632dl5HGeBfXNEf4=",
+    "./_framework/dotnet.native.rjbmzc4jpg.js": "sha256-95bE510j3EADMNW2OKa/DMBhu8N632dl5HGeBfXNEf4=",
+    "./_framework/dotnet.runtime.js": "sha256-YyudibIWETMKrLb+nAZdJ+xDY7HY6BWf6s32UAdcvCU=",
+    "./_framework/dotnet.runtime.r2kbxkuujc.js": "sha256-YyudibIWETMKrLb+nAZdJ+xDY7HY6BWf6s32UAdcvCU=",
+    "./_framework/dotnet.xw6utk146y.js": "sha256-f2SItKbt3cTkFMVzZY23PBG1vmJnAw8q+0k8HJiBvi0="
+  }
+}</script>
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress" aria-label="Carregando a aplicação">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        Ocorreu um erro inesperado.
+        <a href="." class="reload">Recarregar</a>
+        <span class="dismiss" aria-label="Fechar">×</span>
+    </div>
+
+    <script src="_framework/blazor.webassembly.958z1vx7fr.js"></script>
+</body>
+
+</html>

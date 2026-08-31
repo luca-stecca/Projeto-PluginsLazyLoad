@@ -1,0 +1,35 @@
+<div class="plugin-button-wrapper">
+    <button class="button button--primary" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); border-color: #f472b6; color: #fff; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.25);" @onclick="ExecutarAuditoria">
+        <span aria-hidden="true">🔍</span>
+        @Rotulo
+    </button>
+
+    @if (!string.IsNullOrEmpty(resultadoAuditoria))
+    {
+        <div class="execution-result" style="margin-top: 0.8rem; border-left-color: #ec4899; background: rgba(236, 72, 153, 0.08);" role="status">
+            <span>@resultadoAuditoria</span>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Rotulo { get; set; } = "Executar Auditoria Fiscal Avançada (Exclusivo Beta)";
+
+    [Parameter]
+    public EventCallback<string> OnExecutado { get; set; }
+
+    private string? resultadoAuditoria;
+
+    private async Task ExecutarAuditoria()
+    {
+        var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+        var notasAuditadas = Random.Shared.Next(120, 380);
+        resultadoAuditoria = $"[Auditoria IA · Beta] {notasAuditadas} notas fiscais auditadas com 100% de conformidade às {timestamp}!";
+        
+        if (OnExecutado.HasDelegate)
+        {
+            await OnExecutado.InvokeAsync(resultadoAuditoria);
+        }
+    }
+}
